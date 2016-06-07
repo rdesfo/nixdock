@@ -1,10 +1,13 @@
 FROM scratch
-MAINTAINER Jean-Francois Richard <jf.richard@heimdalsgata.com>
+MAINTAINER Ryan Desfosses <ryan@desfo.org>
+
 ADD tmp/nix-archive /nix/
 ADD tmp/nix-archive/store/*-bash-*/bin/bash /bin/sh
+
 WORKDIR /root
 ENV HOME /root
 ENV USER root
+
 RUN \
   echo "root::0:"          >  /etc/group                         &&\
   echo "nixbld::1:nixbld1" >> /etc/group                         &&\
@@ -29,5 +32,6 @@ RUN \
   mkdir /nix/var/nix/manifests                                   &&\
   nix-collect-garbage                                            &&\
   nix-collect-garbage --delete-old
+
 ENTRYPOINT ["/bin/nixdo"]
 CMD ["/bin/nixdo", "bash" ]
